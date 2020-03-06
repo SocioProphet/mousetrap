@@ -205,6 +205,12 @@
         }
 
         if (_KEYCODE_MAP[e.which]) {
+            // HACK: on foreign language keyboards the keycode 192 is used for a ton of other keys
+            // for those cases, it is relatively safe to override the mapping and just use the newer
+            // event key property
+            if (e.which === 192) {
+                return e.key
+            }
             return _KEYCODE_MAP[e.which];
         }
 
