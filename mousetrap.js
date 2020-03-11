@@ -1,4 +1,13 @@
 /*global define:false */
+
+function fixBacktick (value, e) {
+  if (e.key === '`') {
+    return e.key
+  } else {
+    return value
+  }
+}
+
 /**
  * Copyright 2015 Craig Campbell
  *
@@ -196,12 +205,12 @@
                 character = character.toLowerCase();
             }
 
-            return character;
+            return fixBacktick(character, e);
         }
 
         // for non keypress events the special maps are needed
         if (_MAP[e.which]) {
-            return _MAP[e.which];
+            return fixBacktick(_MAP[e.which], e);
         }
 
         if (_KEYCODE_MAP[e.which]) {
@@ -211,7 +220,7 @@
             if (e.which === 192) {
                 return e.key
             }
-            return _KEYCODE_MAP[e.which];
+            return fixBacktick(_KEYCODE_MAP[e.which], e);
         }
 
         // if it is not in the special map
@@ -219,7 +228,7 @@
         // with keydown and keyup events the character seems to always
         // come in as an uppercase character whether you are pressing shift
         // or not.  we should make sure it is always lowercase for comparisons
-        return String.fromCharCode(e.which).toLowerCase();
+        return fixBacktick(String.fromCharCode(e.which).toLowerCase(), e);
     }
 
     /**
