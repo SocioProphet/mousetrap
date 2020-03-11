@@ -1,4 +1,15 @@
 /*global define:false */
+
+// A bunch of things from 0 on a numpad and ö are confused for as backtick
+// this is a simple hack for now that will keep ` safe
+function fixBacktick (value, e) {
+  if (value === '`') {
+    return e.key
+  } else {
+    return value
+  }
+}
+
 /**
  * Copyright 2015 Craig Campbell
  *
@@ -196,22 +207,16 @@
                 character = character.toLowerCase();
             }
 
-            return character;
+            return fixBacktick(character, e);
         }
 
         // for non keypress events the special maps are needed
         if (_MAP[e.which]) {
-            return _MAP[e.which];
+            return fixBacktick(_MAP[e.which], e);
         }
 
         if (_KEYCODE_MAP[e.which]) {
-            // HACK: on foreign language keyboards the keycode 192 is used for a ton of other keys
-            // for those cases, it is relatively safe to override the mapping and just use the newer
-            // event key property
-            if (e.which === 192) {
-                return e.key
-            }
-            return _KEYCODE_MAP[e.which];
+            return fixBacktick(_KEYCODE_MAP[e.which], e);
         }
 
         // if it is not in the special map
@@ -219,7 +224,7 @@
         // with keydown and keyup events the character seems to always
         // come in as an uppercase character whether you are pressing shift
         // or not.  we should make sure it is always lowercase for comparisons
-        return String.fromCharCode(e.which).toLowerCase();
+        return fixBacktick(String.fromCharCode(e.which).toLowerCase(), e);
     }
 
     /**
