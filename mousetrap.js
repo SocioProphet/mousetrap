@@ -1,7 +1,9 @@
 /*global define:false */
 
+// A bunch of things from 0 on a numpad and ö are confused for as backtick
+// this is a simple hack for now that will keep ` safe
 function fixBacktick (value, e) {
-  if (e.key === '`') {
+  if (value === '`') {
     return e.key
   } else {
     return value
@@ -214,12 +216,6 @@ function fixBacktick (value, e) {
         }
 
         if (_KEYCODE_MAP[e.which]) {
-            // HACK: on foreign language keyboards the keycode 192 is used for a ton of other keys
-            // for those cases, it is relatively safe to override the mapping and just use the newer
-            // event key property
-            if (e.which === 192) {
-                return e.key
-            }
             return fixBacktick(_KEYCODE_MAP[e.which], e);
         }
 
